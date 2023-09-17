@@ -41,7 +41,7 @@ def transposition(matr, x, y):
 
 def matrix_sum(matr_1, matr_2, x_1, y_1, x_2, y_2):
     if x_1 != x_2 or y_1 != y_2:
-        print("Размеры матриц не соответствуют")
+        return 0
     else:
         matr_sum = [[matr_1[i][j] + matr_2[i][j] for i in range(x_1)] for j in range(y_1)]
         return matr_sum
