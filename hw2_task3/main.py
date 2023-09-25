@@ -1,14 +1,4 @@
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
-
-    def append(self, val):
-        end = Node(val)
-        n = self
-        while n.next:
-            n = n.next
-        n.next = end
+import os
 
 
 def insert(line, start, fragment):
@@ -33,35 +23,34 @@ def delete(line, start, end):
 def find_dna(file_in, file_out):
     i = 0
     parameters = []
+    dna_steps = []
     with open(file_in) as file:
         for lines in file:
             if i < 3:
                 if i == 1:
-                    linked_list = Node(lines)
-                    linked_list_n = linked_list
+                    dna_steps.append(lines)
                     i += 1
                 else:
                     parameters.append(lines.rstrip())
                     i += 1
             else:
-                start_line = lines[lines.find("[") + 1:lines.find("]")]
-                fragment_line = lines[lines.rfind("[") + 1:lines.rfind("]")]
-                if lines[:lines.find("[")] == "INSERT":
-                    linked_list.append(insert(linked_list_n.data, start_line, fragment_line))
-                elif lines[:lines.find("[")] == "REPLACE":
-                    linked_list.append(replace(linked_list_n.data, start_line, fragment_line))
-                elif lines[:lines.find("[")] == "DELETE":
-                    linked_list.append(delete(linked_list_n.data, start_line, fragment_line))
-                linked_list_n = linked_list_n.next
+                start_line = lines.split()[1]
+                fragment_line = lines.split()[2]
+                if lines.split()[0] == "INSERT":
+                    dna_steps.append(insert(dna_steps[-1], start_line, fragment_line))
+                elif lines.split()[0] == "REPLACE":
+                    dna_steps.append(replace(dna_steps[-1], start_line, fragment_line))
+                elif lines.split()[0] == "DELETE":
+                    dna_steps.append(delete(dna_steps[-1], start_line, fragment_line))
     with open(file_out, 'w') as file:
-        node = linked_list
-        file.write(node.data)
-        while node.next:
-            node = node.next
-            file.write(node.data)
+        file.writelines(dna_steps)
 
 
 if __name__ == "__main__":
-    dna_in = input("Введите путь до файла с изначальным ДНК: ")
-    dna_out = input("Введите путь до файла, в котором будет содержаться конечная последовательность ДНК: ")
+    dna_in = input("Введите путь до файла с изначальным ДНК:\n")
+    while not os.path.exists(dna_in):
+        dna_in = input("Путь до файла с изначальным ДНК указан некорректно, попробуйте ещё раз:\n")
+    dna_out = input("Введите путь до файла, в котором будут содержаться результаты экспериментов:\n")
+    while not os.path.exists(dna_out):
+        dna_out = input("Путь до файла, в котором будут содержаться результаты экспериментов, указан некорректно, попробуйте ещё раз:\n")
     find_dna(dna_in, dna_out)
