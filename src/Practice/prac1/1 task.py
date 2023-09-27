@@ -6,7 +6,7 @@ def delenie(delimoe, delitel):
     return chastnoe
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     delimoe = int(input("Введите делимое: "))
     delitel = int(input("Введите делитель: "))
     print(f"Неполное частное от деления = {delenie(delimoe, delitel)}")
