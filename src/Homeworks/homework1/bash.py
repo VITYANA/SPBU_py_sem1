@@ -21,7 +21,7 @@ def return_head_lines(file, parameter):
 
 
 def return_head_bytes(file, parameter):
-    final_arr = b''
+    final_arr = b""
     i = 0
     with open(file) as file_in:
         for lines in file_in:
@@ -48,12 +48,12 @@ def return_tail_lines(file, parameter):
 
 
 def return_tail_bytes(string, parameter):
-    final_string = ''
+    final_string = ""
     reversed_string = string[::-1]
     current_bytes = 0
     i = 0
     while i != len(string) and current_bytes != parameter:
-        current_bytes += len(reversed_string[i].encode('utf-8'))
+        current_bytes += len(reversed_string[i].encode("utf-8"))
         final_string += reversed_string[i]
         i += 1
     return final_string[::-1]
@@ -61,7 +61,7 @@ def return_tail_bytes(string, parameter):
 
 if __name__ == "__main__":
     file_get = find_file(sys.argv[-1], "/")
-    main_function_name = (sys.argv[1])
+    main_function_name = sys.argv[1]
     args = sys.argv[2:-1]
     if main_function_name == "wc":
         result = []
