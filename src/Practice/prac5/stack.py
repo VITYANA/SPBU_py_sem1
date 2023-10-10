@@ -36,8 +36,13 @@ def size(stack):
     return stack.size
 
 
+def create_stack():
+    new_stack = Stack()
+    return new_stack
+
+
 if __name__ == "__main__":
-    stack1 = Stack()
+    stack1 = create_stack()
     for i in range(3):
         push(stack1, i)
     print(size(stack1))
