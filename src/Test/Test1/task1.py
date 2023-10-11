@@ -39,11 +39,11 @@ def sort(file_in, file_out, a, b):
 
 
 if __name__ == "__main__":
-    # if not os.path.isfile(sys.argv[-2]):
-    #     print(f"No {sys.argv[-2]} file")
-    # elif os.path.isfile(sys.argv[-1]):
-    #     print(f"file {sys.argv[-1]} already exist")
-    # else:
+    if not os.path.isfile(sys.argv[-2]):
+        print(f"No {sys.argv[-2]} file")
+    elif os.path.isfile(sys.argv[-1]):
+        print(f"file {sys.argv[-1]} already exist")
+    else:
         file_in_get = find_file(sys.argv[-2], "/")
         file_out_get = find_file(sys.argv[-1], "/")
         first_num = int(sys.argv[1])
