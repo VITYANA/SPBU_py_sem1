@@ -16,9 +16,12 @@ def main_func():
 
 
 def quadratic_equation_solve(a, b, c):
-    discriminant = b ** 2 - 4 * a * c
+    discriminant = b**2 - 4 * a * c
     if discriminant > 0:
-        return [(-b + discriminant ** 0.5) / (2 * a), (-b - discriminant ** 0.5) / (2 * a)]
+        return [
+            (-b + discriminant**0.5) / (2 * a),
+            (-b - discriminant**0.5) / (2 * a),
+        ]
     elif discriminant == 0:
         return [-b / (2 * a)]
     else:

@@ -7,22 +7,18 @@ quadratic = [
     (2, -5, 3, [1.5, 1]),
     (1, -4, 3, [3, 1]),
     (1, 4, 3, [-1, -3]),
-    (1, 2, 3, "Negative discriminant, no solves.")
+    (1, 2, 3, "Negative discriminant, no solves."),
 ]
 
 
 linear = [
     (2, 3, -1.5),
     (0, 3, "Solve is any real number."),
-    (3, 0, "Wrong parameters. k and b cant be zero.")
+    (3, 0, "Wrong parameters. k and b cant be zero."),
 ]
 
 
-number = [
-    ("1", True),
-    ('acd', False),
-    ("0.000", True)
-]
+number = [("1", True), ("acd", False), ("0.000", True)]
 
 
 main = [
@@ -32,7 +28,7 @@ main = [
     ("1 2 3", "Negative discriminant, no solves."),
     ("0, 3", "Wrong input!"),
     ("0.000", "Wrong input!"),
-    ("abc 1 3", "Wrong input!")
+    ("abc 1 3", "Wrong input!"),
 ]
 
 
