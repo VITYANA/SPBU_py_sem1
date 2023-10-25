@@ -3,59 +3,124 @@ import pytest
 from src.Practice.prac6.task1 import *
 
 
-quadratic = [
-    (2, -5, 3, [1.5, 1]),
-    (1, -4, 3, [3, 1]),
-    (1, 4, 3, [-1, -3]),
-    (1, 2, 3, "Negative discriminant, no solves."),
-]
+@pytest.mark.parametrize(
+    "a, b, c, expected",
+    [
+        (2, -5, 3, ("x1 = 1.5 ", "x2 = 1.0")),
+        (1, -4, 3, ("x1 = 3.0 ", "x2 = 1.0")),
+        (1, 4, 3, ("x1 = -1.0 ", "x2 = -3.0")),
+    ],
+)
+def test_quadratic_equation_solve(a, b, c, expected):
+    assert quadratic_equation_solve(a, b, c) == expected
 
 
-linear = [
-    (2, 3, -1.5),
-    (0, 3, "Solve is any real number."),
-    (3, 0, "Wrong parameters. k and b cant be zero."),
-]
+@pytest.mark.parametrize(
+    "a, b, c, expected",
+    [
+        (1, 2, 3, ValueError),  # ValueError("Negative discriminant, no solves.")
+        (5, 3, 7, ValueError),
+        (12, 12, 12, ValueError),
+    ],
+)
+def test_quadratic_equation_solve_ERROR(a, b, c, expected):
+    with pytest.raises(ValueError):
+        assert quadratic_equation_solve(a, b, c) == expected
 
 
-number = [("1", True), ("acd", False), ("0.000", True)]
+@pytest.mark.parametrize("k, b, expected", [(2, 3, ("x = -1.5",))])
+def test_linear_equation_solve(k, b, expected):
+    assert linear_equation_solve(k, b) == expected
 
 
-main = [
-    ("2 -5 3", "x1 = 1.5\nx2 = 1.0"),
-    ("1 -4 3", "x1 = 3\nx2 = 1"),
-    ("1 4 3", "x1 = -3\nx2 = -1"),
-    ("1 2 3", "Negative discriminant, no solves."),
-    ("0, 3", "Wrong input!"),
-    ("0.000", "Wrong input!"),
-    ("abc 1 3", "Wrong input!"),
-]
+@pytest.mark.parametrize(
+    "tpl, expected", ((("1", "2", "3"), True), (("15", "30", "0"), True))
+)
+def test_check_input(tpl, expected):
+    assert check_input(tpl) == expected
 
 
-@pytest.mark.parametrize("a, b, c, expected", quadratic)
-def quadratic_equation_solve_test(a, b, c, expected):
-    actual = quadratic_equation_solve(a, b, c)
-    assert actual == expected
+@pytest.mark.parametrize(
+    "tpl, expected",
+    (
+        (("1",), AttributeError),
+        (("ab", "0"), AttributeError),
+        (("ab",), AttributeError),
+    ),
+)
+def test_check_input_AttributeError(tpl, expected):
+    with pytest.raises(AttributeError):
+        assert check_input(tpl) == expected
 
 
-@pytest.mark.parametrize("k, b, expected", linear)
-def linear_equation_solve_test(k, b, expected):
-    actual = linear_equation_solve(k, b)
-    assert actual == expected
+@pytest.mark.parametrize(
+    "tpl, expected",
+    (
+        (("1", "  ", "1,2312"), ValueError),
+        (("ab", "0", "0"), ValueError),
+        (("21", "error", "21"), AttributeError),
+    ),
+)
+def test_check_input_ValueError(tpl, expected):
+    with pytest.raises(ValueError):
+        assert check_input(tpl) == expected
 
 
-@pytest.mark.parametrize("argument, expected", number)
-def is_number_test(argument, expected):
-    actual = is_number(argument)
-    assert actual == expected
+@pytest.mark.parametrize("a, b, c, expected", ((0, 0, 0, "Solve is any real number."),))
+def test_solve_equation_000(a, b, c, expected):
+    assert solve_equation(a, b, c) == expected
 
 
-@pytest.mark.parametrize("input_line, expected", main)
+@pytest.mark.parametrize(
+    "a, b, c, expected", ((0, 0, 3, ValueError), (0, 0, 21, ValueError))
+)
+def test_solve_equation_ValueError(a, b, c, expected):
+    with pytest.raises(ValueError):
+        assert solve_equation(a, b, c) == expected
+
+
+@pytest.mark.parametrize(
+    "a, b, c, expected",
+    (
+        (0, 3, 3, linear_equation_solve(3, 3)),
+        (0, 15, -6, linear_equation_solve(15, -6)),
+    ),
+)
+def test_solve_equation_linear(a, b, c, expected):
+    assert solve_equation(a, b, c) == expected
+
+
+@pytest.mark.parametrize(
+    "a, b, c, expected",
+    (
+        (3, 15, 3, quadratic_equation_solve(3, 15, 3)),
+        (8, 15, -6, quadratic_equation_solve(8, 15, -6)),
+    ),
+)
+def test_solve_equation_quadratic(a, b, c, expected):
+    assert solve_equation(a, b, c) == expected
+
+
+@pytest.mark.parametrize(
+    "argument, expected", [("1", True), ("acd", False), ("0.000", True)]
+)
+def test_is_number(argument, expected):
+    assert is_number(argument) == expected
+
+
+@pytest.mark.parametrize(
+    "input_line, expected",
+    [
+        ("2 -5 3", "Solution of the equation: x1 = 1.5 x2 = 1.0\n"),
+        ("1 -4 3", "Solution of the equation: x1 = 3.0 x2 = 1.0\n"),
+        ("1 4 3", "Solution of the equation: x1 = -1.0 x2 = -3.0\n"),
+        ("0 2 5", "Solution of the equation: x = -2.5\n"),
+    ],
+)
 def test_main_scenario(monkeypatch, input_line, expected):
     monkeypatch.setattr("builtins.input", lambda _: input_line)
     fake_output = StringIO()
     monkeypatch.setattr("sys.stdout", fake_output)
     main_func()
     output = fake_output.getvalue()
-    for string in output:
-        assert string == expected
+    assert output == expected

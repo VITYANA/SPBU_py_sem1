@@ -1,40 +1,48 @@
 def main_func():
-    args = input("Please, write a, b, c: ").split()
-    if len(args) != 3 or any(not is_number(i) for i in args):
-        return "Wrong input!"
+    args = tuple(input("Please, write a, b, c: ").split())
+    check_input(args)
     a, b, c = float(args[0]), float(args[1]), float(args[2])
-    if a != 0:
-        res = quadratic_equation_solve(a, b, c)
-        if len(res) == 2:
-            return f"x1 = {res[0]}\nx2 = {res[1]}"
-        elif len(res) == 1:
-            return -b / (2 * a)
-        else:
-            return res
+    result = solve_equation(a, b, c)
+    print(f"Solution of the equation: {''.join(map(str, result))}")
+
+
+def check_input(args):
+    if len(args) != 3:
+        raise AttributeError("You need to input 3 args!")
+    for i in args:
+        if not is_number(i):
+            raise ValueError(f"{i} isn't number!")
+    return True
+
+
+def solve_equation(a, b, c):
+    if a == b == c == 0:
+        return "Solve is any real number."
+    elif a == b == 0:
+        raise ValueError("Wrong parameters. a and b cant be zero.")
     elif a == 0:
-        return linear_equation_solve(float(b), float(c))
+        return linear_equation_solve(b, c)
+    else:
+        return quadratic_equation_solve(a, b, c)
 
 
 def quadratic_equation_solve(a, b, c):
     discriminant = b**2 - 4 * a * c
     if discriminant > 0:
-        return [
-            (-b + discriminant**0.5) / (2 * a),
-            (-b - discriminant**0.5) / (2 * a),
-        ]
+        res = (
+            f"x1 = {((-b + discriminant ** 0.5) / (2 * a))} ",
+            f"x2 = {((-b - discriminant ** 0.5) / (2 * a))}",
+        )
+        return res
     elif discriminant == 0:
-        return [-b / (2 * a)]
+        return tuple(f"x = {-b / (2 * a)}")
     else:
-        return "Negative discriminant, no solves."
+        raise ValueError("Negative discriminant, no solves.")
 
 
 def linear_equation_solve(k, b):
-    if k == 0:
-        if b == 0:
-            return "Wrong parameters. k and b cant be zero."
-        return "Solve is any real number."
-    result = -b / k
-    return result
+    res = (f"x = {-b / k}",)
+    return res
 
 
 def is_number(arg):
@@ -46,4 +54,4 @@ def is_number(arg):
 
 
 if __name__ == "__main__":
-    print(main_func())
+    main_func()
