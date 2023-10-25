@@ -1,9 +1,14 @@
+from functools import wraps
+
+
 def curry_explicit(function, arity):
     if arity < 0:
         raise ValueError("Arity cannot be negative.")
     elif arity == 0:
-        return lambda: function()
+        return function()
+    argument_list = []
 
+    @wraps(function)
     def inner_func(arguments):
         if arity == len(arguments):
             return function(*arguments)
@@ -13,7 +18,6 @@ def curry_explicit(function, arity):
 
         return curry
 
-    argument_list = []
     return inner_func(argument_list)
 
 
@@ -21,6 +25,7 @@ def uncurry_explicit(function, arity):
     if arity < 0:
         raise ValueError("Arity cannot be negative.")
 
+    @wraps(function)
     def uncurry(*args):
         if len(args) == 1 or len(args) == 0:
             return function(*args)
