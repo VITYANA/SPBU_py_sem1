@@ -1,9 +1,17 @@
 def main_func():
     args = tuple(input("Please, write a, b, c: ").split())
-    check_input(args)
+    try:
+        check_input(args)
+    except Exception as err:
+        print(f"Incorrect input: {err}")
+        return 0
     a, b, c = float(args[0]), float(args[1]), float(args[2])
-    result = solve_equation(a, b, c)
-    print(f"Solution of the equation: {''.join(map(str, result))}")
+    try:
+        result = solve_equation(a, b, c)
+        print(f"Solution of the equation: {''.join(map(str, result))}")
+    except Exception as err:
+        print(f"Program ended with error: {err}")
+        return 0
 
 
 def check_input(args):
