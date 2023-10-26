@@ -132,7 +132,10 @@ def test_main_scenario(monkeypatch, input_line, expected):
         ("1 2 3", "Program ended with error: Negative discriminant, no solves.\n"),
         ("12", "Incorrect input: You need to input 3 args!\n"),
         ("1 a 3", "Incorrect input: a isn't number!\n"),
-        ("0 0 15", "Program ended with error: Wrong parameters. a and b cant be zero.\n"),
+        (
+            "0 0 15",
+            "Program ended with error: Wrong parameters. a and b cant be zero.\n",
+        ),
     ],
 )
 def test_main_scenario_err(monkeypatch, input_line, expected):
