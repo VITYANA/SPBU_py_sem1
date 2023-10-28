@@ -1,3 +1,6 @@
+from math import gcd
+
+
 def main():
     n = input("Введите число - предел для знаменателя: ")
     while not check_input(n):
@@ -17,7 +20,7 @@ def find_answers(n):
         check = True
         for j in range(i + 1, n + 1):
             for divider in range(2, n):
-                if i % divider == 0 and j % divider == 0:
+                if gcd(i, j) == divider:
                     check = False
             if check and i / j not in all_nums:
                 res = i / j
