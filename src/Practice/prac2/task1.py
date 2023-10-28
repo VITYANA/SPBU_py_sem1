@@ -1,7 +1,8 @@
 def main():
-    n = int(input("Введите число - предел для знаменателя: "))
-    check_input(n)
-    all_nums = find_answers(n)
+    n = input("Введите число - предел для знаменателя: ")
+    while not check_input(n):
+        n = input("Введенное n не является число, повторите ввод: ")
+    all_nums = find_answers(int(n))
     result = sort_nums(all_nums)
     print("\n".join(map(str, result)))
 
@@ -28,8 +29,8 @@ def check_input(n):
     try:
         int(n)
         return True
-    except TypeError:
-        raise TypeError(f"{n} isn't integer.")
+    except:
+        return False
 
 
 if __name__ == "__main__":
