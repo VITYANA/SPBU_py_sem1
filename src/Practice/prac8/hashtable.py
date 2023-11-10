@@ -3,17 +3,22 @@ import typing
 
 Key = typing.TypeVar("Key")
 Value = typing.TypeVar("Value")
+DefaultCapacity = 1024
 
 
 @dataclass
-class HashTable:
-    table: list[typing.Optional["Node"]]
-    capacity: int = 1024
+class HashTable(typing.Generic[Key, Value]):
+    table: list[typing.Optional["Node[Key, Value]"]]
+    capacity: int = DefaultCapacity
     size: int = 0
+    hs_func: typing.Callable[[typing.Any], Key] = hash
+
+    def hash_func(self, key):
+        return self.hs_func(key) % self.capacity
 
 
 @dataclass
-class Node:
+class Node(typing.Generic[Key, Value]):
     key: Key
     value: Value
     next: "Node" = None
@@ -27,21 +32,22 @@ def delete_hashtable(hashtable: HashTable):
     for i in range(hashtable.capacity):
         elem_to_del = hashtable.table[i]
 
-        def del_rec(elem_to_del):
-            if elem_to_del.next is None:
-                del elem_to_del
+        def del_rec(elem_to_delete):
+            if elem_to_delete is None:
+                del elem_to_delete
                 return
-            elem_to_del.next = del_rec(elem_to_del.next)
+            if elem_to_delete.next is None:
+                del elem_to_delete.next
+                del elem_to_delete
+                return
+            del_rec(elem_to_delete.next)
 
+        del_rec(elem_to_del)
     del hashtable
 
 
-def hash_func(hashtable: HashTable, key: Key) -> int:
-    return hash(key) % hashtable.capacity
-
-
 def put(hashtable: HashTable, key: Key, value: Value):
-    index = hash_func(hashtable, key)
+    index = hashtable.hash_func(key)
     if hashtable.table[index] is None:
         hashtable.table[index] = Node(key, value)
         hashtable.size += 1
@@ -59,7 +65,7 @@ def put(hashtable: HashTable, key: Key, value: Value):
 
 
 def remove(hashtable: HashTable, key: Key) -> Value:
-    index = hash_func(hashtable, key)
+    index = hashtable.hash_func(key)
     if not has_key(hashtable, key):
         raise KeyError
     previous = None
@@ -80,25 +86,20 @@ def remove(hashtable: HashTable, key: Key) -> Value:
 def get(hashtable: HashTable, key: Key) -> Value:
     if not has_key(hashtable, key):
         raise KeyError
-    index = hash_func(hashtable, key)
+    index = hashtable.hash_func(key)
     return hashtable.table[index].value
 
 
 def has_key(hashtable: HashTable, key: Key) -> bool:
-    index = hash_func(hashtable, key)
+    index = hashtable.hash_func(key)
     return hashtable.table[index] is not None
 
 
 def items(hashtable: HashTable) -> list[tuple[Key, Value]]:
     list_to_return = []
     i = 0
-    try:
-        while len(list_to_return) != hashtable.size and i != hashtable.capacity:
-            if hashtable.table[i] is not None:
-                list_to_return.append(
-                    (hashtable.table[i].key, hashtable.table[i].value)
-                )
-            i += 1
-        return list_to_return
-    except ValueError:
-        raise ValueError("Some data have collision.")
+    while len(list_to_return) != hashtable.size and i != hashtable.capacity:
+        if hashtable.table[i] is not None:
+            list_to_return.append((hashtable.table[i].key, hashtable.table[i].value))
+        i += 1
+    return list_to_return
