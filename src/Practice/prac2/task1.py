@@ -4,7 +4,7 @@ from math import gcd
 def main():
     n = input("Введите число - предел для знаменателя: ")
     while not check_input(n):
-        n = input("Введенное n не является число, повторите ввод: ")
+        n = input("Введенное n не является числом, повторите ввод: ")
     all_nums = find_answers(int(n))
     result = sort_nums(all_nums)
     print("\n".join(map(str, result)))
@@ -16,24 +16,17 @@ def sort_nums(lst):
 
 def find_answers(n):
     all_nums = []
-    for i in range(1, n):
+    for i in range(1, n - 1):
         check = True
         for j in range(i + 1, n + 1):
-            for divider in range(2, n):
-                if gcd(i, j) == divider:
-                    check = False
-            if check and i / j not in all_nums:
+            if gcd(i, j) == 1 and i / j not in all_nums:
                 res = i / j
                 all_nums.append(f"{i} / {j} = {res}")
     return all_nums
 
 
 def check_input(n):
-    try:
-        int(n)
-        return True
-    except:
-        return False
+    return n.isdigit()
 
 
 if __name__ == "__main__":
