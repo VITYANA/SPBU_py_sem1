@@ -1,5 +1,4 @@
 def get_16b(s: str) -> list[str]:
-    res_list = []
     bit_list = []
     for i in s:
         if ord(i) < 65535:
@@ -9,11 +8,14 @@ def get_16b(s: str) -> list[str]:
             ]
             bit_list.append(bit_1_symbol[0])
         else:
-            bit_1_symbol = f"{ord(i):032b}"
-            bit_1_symbol = [
-                " ".join(bit_1_symbol[j * 8 : (j + 1) * 8] for j in range(4))
+            bit_1_symbol = f"{ord(i) - 65536:020b}"
+            major_bits = f"{(int(bit_1_symbol[:10], 2) + 55296):b}"
+            minor_bits = f"{(int(bit_1_symbol[10:], 2) + 56320):b}"
+            result_1_symbol_bit = major_bits + minor_bits
+            result_1_symbol_bit = [
+                " ".join(result_1_symbol_bit[j * 8 : (j + 1) * 8] for j in range(4))
             ]
-            bit_list.append(bit_1_symbol[0])
+            bit_list.append(result_1_symbol_bit[0])
     return bit_list
 
 
