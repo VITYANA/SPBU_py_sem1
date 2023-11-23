@@ -1,18 +1,20 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, TypeVar, Generic
+
+Value = TypeVar("Value")
 
 
 @dataclass
-class Node:
-    value: any
-    next: Optional["Node"] = None
+class Node(Generic[Value]):
+    value: Value
+    next: Optional["Node[Value]"] = None
 
 
 @dataclass
-class Queue:
+class Queue(Generic[Value]):
     size: int = 0
-    head: Optional["Node"] = None
-    tail: Optional["Node"] = None
+    head: Optional["Node[Value]"] = None
+    tail: Optional["Node[Value]"] = None
 
 
 def create_queue():
