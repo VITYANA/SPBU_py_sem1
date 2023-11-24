@@ -10,6 +10,7 @@ def spy(function):
         inner.logs.append((current_time, params))
         result = function(*args, **kwargs)
         return result
+
     inner.logs = []
     return inner
 
@@ -33,14 +34,12 @@ def main():
     foo(num=4)
     foo("hello")
     foo(5)
-    for (time, parameters) in print_usage_statistic(foo):
-        str_parameters = ", ".join(
-            f"{k} = {v}" for k, v in parameters.items()
-        )
+    for time, parameters in print_usage_statistic(foo):
+        str_parameters = ", ".join(f"{k} = {v}" for k, v in parameters.items())
         print(
             f"function {foo.__name__} was called at {time} with parameters:\n{str_parameters}"
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
