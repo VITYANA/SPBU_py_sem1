@@ -34,10 +34,9 @@ def test_get_function(key, values, tree):
     assert actual == values
 
 
-@pytest.mark.parametrize("key, expected", ((10, ValueError), (-3, ValueError)))
+@pytest.mark.parametrize("key, expected", ((10, -1), (-3, -1)))
 def test_get_function(key, expected, tree):
-    with pytest.raises(ValueError):
-        assert get_value(tree, key) == expected
+    assert get_value(tree, key) == expected
 
 
 @pytest.mark.parametrize(

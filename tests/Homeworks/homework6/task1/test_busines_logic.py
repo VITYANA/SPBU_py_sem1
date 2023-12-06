@@ -33,7 +33,7 @@ def test_command_selection_exceptions(command, args):
 def test_main_scenario_runner(monkeypatch):
     monkeypatch.setattr(
         "builtins.input",
-        lambda _: "input.txt",
+        lambda _: "tests/Homeworks/homework6/task1/input.txt",
     )
     busines_logic.main()
     assert os.path.exists(f"results.txt")
@@ -42,10 +42,10 @@ def test_main_scenario_runner(monkeypatch):
 
 def test_main_scenario():
     expected_results, expected_balance, actual_results, actual_balance = [], [], [], []
-    with open("shop_balance_expected.txt") as file:
+    with open("tests/Homeworks/homework6/task1/shop_balance_expected.txt") as file:
         for line in file.readlines():
             expected_balance.append(line)
-    with open("shop_results_expected.txt") as file:
+    with open("tests/Homeworks/homework6/task1/shop_results_expected.txt") as file:
         for line in file.readlines():
             expected_results.append(line)
     with open("balance.txt") as file:
