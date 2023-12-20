@@ -3,20 +3,6 @@ from io import StringIO
 import pytest
 
 
-# @pytest.mark.parametrize("input_line, input_int, expected", (
-#                          ("ab", "1", "Sprite side size must be integer. Enter correct digit: \n"),
-#                          ("", "1", "Sprite side size must be integer. Enter correct digit: \n"),
-#                          ("int", "1", "Sprite side size must be integer. Enter correct digit: \n")))
-# def test_validate_input(input_line, input_int, expected, monkeypatch):
-#     monkeypatch.setattr("builtins.input", lambda _: input_line)
-#     fake_output = StringIO()
-#     monkeypatch.setattr("sys.stdout", fake_output)
-#     validate_input(input_line)
-#     output = fake_output.getvalue()
-#     return_value = validate_input(input_int)
-#     assert output == expected and input_int == return_value
-
-
 @pytest.mark.parametrize("size", (5, 10, 12))
 def test_generate_matrix(size):
     matrix = generate_matrix(size)
