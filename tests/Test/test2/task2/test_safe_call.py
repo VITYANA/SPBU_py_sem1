@@ -5,7 +5,7 @@ import pytest
 @safe_call
 def foo(a):
     if a < 100:
-        raise ValueError("a must be more or equal 100.")
+        raise ValueError('a must be more or equal 100.')
     return a
 
 
