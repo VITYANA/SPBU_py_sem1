@@ -5,14 +5,14 @@ import pytest
 @safe_call
 def foo(a):
     if a < 100:
-        raise ValueError('a must be more or equal 100.')
+        raise ValueError("a must be more or equal 100.")
     return a
 
 
 @pytest.mark.parametrize(
     "func, input_arg, expected_line, expected_num",
     [
-        (foo, 0, "raise ValueError('a must be more or equal 100.')", 8),
+        (foo, 0, 'raise ValueError("a must be more or equal 100.")', 8),
         (foo, "abc", "if a < 100:", 7),
     ],
 )
@@ -39,7 +39,7 @@ def test_extract_error_line_from_stacktrace(
                 "error in function: foo\n"
                 "type of error: 'ValueError'\n"
                 "message of error: a must be more or equal 100.\n"
-                "error line: raise ValueError('a must be more or equal 100.')\n"
+                'error line: raise ValueError("a must be more or equal 100.")\n'
                 "error line num: 8"
             ),
         ),
@@ -51,7 +51,7 @@ def test_extract_error_line_from_stacktrace(
                 "error in function: foo\n"
                 "type of error: 'ValueError'\n"
                 "message of error: a must be more or equal 100.\n"
-                "error line: raise ValueError('a must be more or equal 100.')\n"
+                'error line: raise ValueError("a must be more or equal 100.")\n'
                 "error line num: 8"
             ),
         ),
