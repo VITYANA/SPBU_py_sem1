@@ -13,7 +13,7 @@ class Tree(Generic[Key, Value]):
 
 @dataclass
 class TreeNode(Generic[Key, Value]):
-    key: Optional[Key]
+    key: Key
     value: Optional[Value]
     height: int = 1
     left: Optional["TreeNode[Key, Value]"] = None
@@ -41,8 +41,7 @@ def delete_tree_map(tree):
 def put(tree: Tree, key: Key, value: Value):
     if tree.size != 0:
         new_root = put_node(tree.root, key, value)
-        if tree.root.key != new_root.key:
-            tree.root = new_root
+        tree.root = new_root
     else:
         put_root(tree, key, value)
     tree.size += 1
@@ -157,9 +156,9 @@ def traverse(map: Tree, order: str) -> list["Value"]:
 def get_tree_node(tree: Tree, key: Key) -> TreeNode:
     root = tree.root
 
-    def recursion(root: TreeNode) -> TreeNode:
+    def recursion(root: TreeNode) -> TreeNode | None:
         if root is None:
-            raise ValueError(f"No {key} element in tree.")
+            return None
         if key == root.key:
             return root
         if key < root.key and root.left is not None:
@@ -199,13 +198,39 @@ def get_maximum(tree):
 
 
 def get_lower_bound(tree, key):
-    highest_root = split(tree, key)[1]
-    return get_minimum(highest_root) if highest_root.root is not None else None
+    if tree.root is None:
+        raise ValueError("Tree is empty.")
+    result = None
+    actual_node = tree.root
+    while actual_node is not None:
+        if key > actual_node.key:
+            actual_node = actual_node.right
+        elif key < actual_node.key:
+            result = actual_node.key
+            actual_node = actual_node.left
+        else:
+            return actual_node.key
+    if result is None:
+        raise ValueError(f"No key in structure, bigger than {key}.")
+    return result
 
 
 def get_upper_bound(tree, key):
-    highest_root = split(tree, key + 1)[1]
-    return get_minimum(highest_root) if highest_root.root is not None else None
+    if tree.root is None:
+        raise ValueError("Tree is empty.")
+    result = None
+    actual_node = tree.root
+    while actual_node is not None:
+        if key >= actual_node.key:
+            actual_node = actual_node.right
+        elif key < actual_node.key:
+            result = actual_node.key
+            actual_node = actual_node.left
+        else:
+            return actual_node.key
+    if result is None:
+        raise ValueError(f"No key in structure, bigger than {key}.")
+    return result
 
 
 def separate_keys(keys, key):
@@ -218,14 +243,33 @@ def separate_keys(keys, key):
 def split(tree, key):
     if tree.root is None:
         return Tree(), Tree()
-    keys = traverse(tree, "preorder")
-    higher_keys, lower_keys = separate_keys(keys, key)
-    lower_tree, higher_tree = Tree(), Tree()
-    for pair in higher_keys:
-        put(higher_tree, *pair)
-    for pair in lower_keys:
-        put(lower_tree, *pair)
-    return lower_tree, higher_tree
+
+    def recursion(previous_tree_node, actual_tree_node):
+        if key == actual_tree_node.key:
+            if previous_tree_node.key > actual_tree_node.key:
+                previous_tree_node.left = None
+            else:
+                previous_tree_node.right = None
+            return Tree(tree.root), Tree(actual_tree_node)
+        if (key > actual_tree_node.key and actual_tree_node.right is None) or (
+            key < actual_tree_node.key and actual_tree_node.left is None
+        ):
+            return tree, Tree()
+        if key > actual_tree_node.key:
+            return recursion(actual_tree_node, actual_tree_node.right)
+        else:
+            return recursion(actual_tree_node, actual_tree_node.left)
+
+    if tree.size == 1 or key == tree.root.key:
+        return tree, Tree()
+    if key > tree.root.key:
+        if tree.root.right is not None:
+            return recursion(tree.root, tree.root.right)
+        return tree, Tree()
+    else:
+        if tree.root.left is not None:
+            return recursion(tree.root, tree.root.left)
+        return tree, Tree()
 
 
 def get_height_of_node(node):

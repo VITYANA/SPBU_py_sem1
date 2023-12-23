@@ -1,3 +1,5 @@
+import random
+
 from src.Homeworks.homework6.task1.AVLtree import *
 import pytest
 
@@ -26,6 +28,17 @@ def dummy_bst(elements: tuple):
 def test_create_tree_map():
     test_tree = create_tree_map()
     assert test_tree == Tree()
+
+
+def test_put(empty_tree):
+    actual_tree = empty_tree
+    balance_factor = []
+    for i in range(20):
+        key_value = random.randint(0, 1000)
+        put(actual_tree, key_value, key_value)
+        balance_factor.append(get_balance_factor(actual_tree.root))
+    balance_factor = list(filter(lambda cond: cond < 2, balance_factor))
+    assert len(balance_factor) == 20
 
 
 @pytest.mark.parametrize("key, values", ((1, 1), (3, 3), (5, 5), (7, 7), (9, 9)))
@@ -117,8 +130,8 @@ split_data_set = [
     (
         5,
         [
-            [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]],
-            [[5, 5], [6, 6], [7, 7], [8, 8], [9, 9]],
+            [[0, 0], [1, 1], [2, 2], [3, 3], [7, 7], [8, 8], [9, 9]],
+            [[4, 4], [5, 5], [6, 6]],
         ],
     ),
     (
@@ -137,6 +150,13 @@ split_data_set = [
                 [9, 9],
             ],
             [],
+        ],
+    ),
+    (
+        7,
+        [
+            [[0, 0], [1, 1], [2, 2], [3, 3]],
+            [[4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9]],
         ],
     ),
 ]
