@@ -1,5 +1,5 @@
 import src.Homeworks.homework6.task1.AVLtree as AVLtree
-import src.Homeworks.homework6.task1.busines_logic as busines_logic
+import src.Homeworks.homework6.task1.business_logic as business_logic
 import pytest
 import os.path
 
@@ -10,7 +10,7 @@ def test_file_validation(monkeypatch):
         lambda _: "wrong_name.txt",
     )
     with pytest.raises(ValueError):
-        busines_logic.main()
+        business_logic.main()
 
 
 @pytest.mark.parametrize(
@@ -27,7 +27,7 @@ def test_file_validation(monkeypatch):
 def test_command_selection_exceptions(command, args):
     test_tree = AVLtree.create_tree_map()
     with pytest.raises(ValueError):
-        busines_logic.command_selection(test_tree, command, *args)
+        business_logic.command_selection(test_tree, command, *args)
 
 
 def test_main_scenario_runner(monkeypatch):
@@ -35,7 +35,7 @@ def test_main_scenario_runner(monkeypatch):
         "builtins.input",
         lambda _: "tests/Homeworks/homework6/task1/input.txt",
     )
-    busines_logic.main()
+    business_logic.main()
     assert os.path.exists(f"results.txt")
     assert os.path.exists(f"balance.txt")
 
