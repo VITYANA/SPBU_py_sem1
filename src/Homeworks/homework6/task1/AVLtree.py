@@ -210,9 +210,7 @@ def get_lower_bound(tree, key):
             actual_node = actual_node.left
         else:
             return actual_node.key
-    if result is None:
-        raise ValueError(f"No key in structure, bigger than {key}.")
-    return result
+    return result if result is not None else None
 
 
 def get_upper_bound(tree, key):
@@ -228,9 +226,7 @@ def get_upper_bound(tree, key):
             actual_node = actual_node.left
         else:
             return actual_node.key
-    if result is None:
-        raise ValueError(f"No key in structure, bigger than {key}.")
-    return result
+    return result if result is not None else None
 
 
 def separate_keys(keys, key):
