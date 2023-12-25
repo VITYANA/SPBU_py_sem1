@@ -33,7 +33,7 @@ def test_command_selection_exceptions(command, args, res_file):
 def test_main_scenario_runner(monkeypatch):
     monkeypatch.setattr(
         "builtins.input",
-        lambda _: "tests/Homeworks/homework6/task1/input.txt tests/Homeworks/homework6/task1/balance.txt tests/Homeworks/homework6/task1/results.txt",
+        lambda _: "tests/Homeworks/homework6/task1/input.txt results.txt balance.txt",
     )
     business_logic.main()
     assert os.path.exists(f"results.txt")

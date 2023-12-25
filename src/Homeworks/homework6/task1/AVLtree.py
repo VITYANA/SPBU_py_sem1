@@ -199,10 +199,10 @@ def get_lower_bound(tree, key):
     result = None
     actual_node = tree.root
     while actual_node is not None:
-        result = actual_node.key
         if key > actual_node.key:
             actual_node = actual_node.right
         elif key < actual_node.key:
+            result = actual_node.key
             actual_node = actual_node.left
         else:
             return actual_node.key
@@ -215,10 +215,10 @@ def get_upper_bound(tree, key):
     result = None
     actual_node = tree.root
     while actual_node is not None:
-        result = actual_node.key
         if key >= actual_node.key:
             actual_node = actual_node.right
         elif key < actual_node.key:
+            result = actual_node.key
             actual_node = actual_node.left
     return result
 
