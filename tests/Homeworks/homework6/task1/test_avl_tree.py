@@ -30,15 +30,18 @@ def test_create_tree_map():
     assert test_tree == Tree()
 
 
-def test_put(empty_tree):
+@pytest.mark.parametrize("num_range", (5, 10, 15, 20, 25, 100, 1000))
+def test_put(num_range, empty_tree):
     actual_tree = empty_tree
     balance_factor = []
-    for i in range(20):
+    for i in range(num_range):
         key_value = random.randint(0, 1000)
         put(actual_tree, key_value, key_value)
         balance_factor.append(get_balance_factor(actual_tree.root))
+        balance_factor.append(get_balance_factor(get_tree_node(actual_tree, key_value)))
+    balance_factor_len = len(balance_factor)
     balance_factor = list(filter(lambda cond: cond < 2, balance_factor))
-    assert len(balance_factor) == 20
+    assert len(balance_factor) == balance_factor_len
 
 
 @pytest.mark.parametrize("key, values", ((1, 1), (3, 3), (5, 5), (7, 7), (9, 9)))

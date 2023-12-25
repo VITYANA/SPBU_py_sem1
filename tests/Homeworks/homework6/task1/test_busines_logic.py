@@ -7,33 +7,33 @@ import os.path
 def test_file_validation(monkeypatch):
     monkeypatch.setattr(
         "builtins.input",
-        lambda _: "wrong_name.txt",
+        lambda _: "wrong_name1.txt wrong_name2.txt wrong_name3.txt",
     )
     with pytest.raises(ValueError):
         business_logic.main()
 
 
 @pytest.mark.parametrize(
-    "command, args",
+    "command, args, res_file",
     (
-        ("ADD", (1, 2, 3)),
-        ("ADD", ()),
-        ("GET", ()),
-        ("GET", (1, 2)),
-        ("SELECT", ()),
-        ("SELECT", (1, 2)),
+        ("ADD", "result.txt", (1, 2, 3)),
+        ("ADD", "result.txt", ()),
+        ("GET", "result.txt", ()),
+        ("GET", "result.txt", (1, 2)),
+        ("SELECT", "result.txt", ()),
+        ("SELECT", "result.txt", (1, 2)),
     ),
 )
-def test_command_selection_exceptions(command, args):
+def test_command_selection_exceptions(command, args, res_file):
     test_tree = AVLtree.create_tree_map()
     with pytest.raises(ValueError):
-        business_logic.command_selection(test_tree, command, *args)
+        business_logic.command_selection(test_tree, command, res_file, *args)
 
 
 def test_main_scenario_runner(monkeypatch):
     monkeypatch.setattr(
         "builtins.input",
-        lambda _: "tests/Homeworks/homework6/task1/input.txt",
+        lambda _: "tests/Homeworks/homework6/task1/input.txt tests/Homeworks/homework6/task1/balance.txt tests/Homeworks/homework6/task1/results.txt",
     )
     business_logic.main()
     assert os.path.exists(f"results.txt")

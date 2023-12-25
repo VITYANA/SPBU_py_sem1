@@ -30,16 +30,21 @@ def select_command(tree, size):
     return size_exist
 
 
-def validate_files(input_file):
+def validate_files(files):
+    if len(files) != 3:
+        raise ValueError("You must enter 3 paths.")
+    input_file = files[0]
+    res_file = files[1]
+    balance_file = files[2]
     if not exists(f"{input_file}"):
         raise ValueError(f"Command file {input_file} is not Exist")
-    if exists("balance.txt"):
+    if exists(f"{balance_file}"):
         raise ValueError("balance file is already exist")
-    if exists("results.txt"):
+    if exists(f"{res_file}"):
         raise ValueError("results file is already exist")
 
 
-def command_selection(tree, command, *args):
+def command_selection(tree, command, res_file, *args):
     args_len = len(args)
     match command:
         case "ADD":
@@ -49,37 +54,43 @@ def command_selection(tree, command, *args):
         case "GET":
             if args_len != 1:
                 raise ValueError(f"GET expected 1 argument, but {args_len} are given.")
-            write_results(get_command(tree, *args))
+            write_results(get_command(tree, *args), res_file)
         case "SELECT":
             if args_len != 1:
                 raise ValueError(
                     f"SELECT expected 1 argument, but {args_len} are given."
                 )
             select_size = select_command(tree, *args)
-            write_results(select_size) if select_size >= 0 else write_results("SORRY")
+            write_results(select_size, res_file) if select_size >= 0 else write_results(
+                "SORRY", res_file
+            )
 
 
-def write_results(line):
-    with open("results.txt", "a") as file:
+def write_results(line, res_file):
+    with open(f"{res_file}", "a") as file:
         file.write(str(line) + "\n")
 
 
-def write_balance(lst):
-    with open("balance.txt", "a") as file:
+def write_balance(lst, balance_file):
+    with open(f"{balance_file}", "a") as file:
         for pair in lst:
             file.write(f"{pair[0]} {pair[1]}\n")
 
 
 def main():
-    input_file = input("Enter file with commands: ")
-    validate_files(input_file)
+    files = input("Enter command file, result file, balance file: ").split()
+    validate_files(files)
+    input_file, res_file, balance_file = files[0], files[1], files[2]
     tree = create_tree_map()
     with open(f"{input_file}") as file:
         for line in file.readlines():
             line = line.split(" ")
             command, args = line[0], list(map(int, line[1:]))
-            command_selection(tree, command, *args)
-    write_balance(list(filter(lambda pair: pair[1] > 0, traverse(tree, "postorder"))))
+            command_selection(tree, command, res_file, *args)
+    write_balance(
+        list(filter(lambda pair: pair[1] > 0, traverse(tree, "postorder"))),
+        balance_file,
+    )
 
 
 if __name__ == "__main__":

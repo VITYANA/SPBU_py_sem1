@@ -180,21 +180,17 @@ def has_key(tree: Tree, key: Key) -> bool:
 
 
 def get_minimum(tree):
-    def recursion(root):
-        if root.left is not None:
-            return recursion(root.left)
-        return root.key
-
-    return recursion(tree.root)
+    cur_node = tree.root
+    while cur_node.left is not None:
+        cur_node = cur_node.left
+    return cur_node.key
 
 
 def get_maximum(tree):
-    def recursion(root):
-        if root.right is not None:
-            return recursion(root.right)
-        return root.key
-
-    return recursion(tree.root)
+    cur_node = tree.root
+    while cur_node.right is not None:
+        cur_node = cur_node.right
+    return cur_node.key
 
 
 def get_lower_bound(tree, key):
@@ -203,14 +199,14 @@ def get_lower_bound(tree, key):
     result = None
     actual_node = tree.root
     while actual_node is not None:
+        result = actual_node.key
         if key > actual_node.key:
             actual_node = actual_node.right
         elif key < actual_node.key:
-            result = actual_node.key
             actual_node = actual_node.left
         else:
             return actual_node.key
-    return result if result is not None else None
+    return result
 
 
 def get_upper_bound(tree, key):
@@ -219,14 +215,12 @@ def get_upper_bound(tree, key):
     result = None
     actual_node = tree.root
     while actual_node is not None:
+        result = actual_node.key
         if key >= actual_node.key:
             actual_node = actual_node.right
         elif key < actual_node.key:
-            result = actual_node.key
             actual_node = actual_node.left
-        else:
-            return actual_node.key
-    return result if result is not None else None
+    return result
 
 
 def separate_keys(keys, key):
