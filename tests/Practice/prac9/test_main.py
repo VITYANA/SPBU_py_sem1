@@ -6,29 +6,9 @@ from src.Practice.prac9.task1.FSM import *
 
 def test_make_fsms():
     assert make_fsms() == [
+        FSMachine(*LANGUAGES[0][1:]),
         FSMachine(
-            states=[
-                {"b": 0, "a": 1},
-                {"b": 2, "a": 1},
-                {"b": 3, "a": 1},
-                {"b": 0, "a": 1},
-            ],
-            start_state=0,
-            accepted_states=[3],
-        ),
-        FSMachine(
-            states=[
-                {"0123456789": 1, "+-": 5},
-                {"0123456789": 1, "E": 3, ".": 6},
-                {"0123456789": 2, "E": 3},
-                {"0123456789": 4, "+-": 7},
-                {"0123456789": 4},
-                {"0123456789": 1},
-                {"0123456789": 2},
-                {"0123456789": 4},
-            ],
-            start_state=0,
-            accepted_states=[1, 2, 4],
+            *LANGUAGES[1][1:],
         ),
     ]
 

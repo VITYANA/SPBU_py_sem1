@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class FSMachine:
     states: list[dict[str, int]]
     start_state: int
-    accepted_states: list[int]
+    terminal_states: list[int]
 
 
 def create_fs_machine(
@@ -26,4 +26,4 @@ def validate_string(fsm: FSMachine, string: str):
         current_state = move_state(symbol, current_state, fsm)
         if current_state is None:
             return False
-    return current_state in fsm.accepted_states
+    return current_state in fsm.terminal_states
